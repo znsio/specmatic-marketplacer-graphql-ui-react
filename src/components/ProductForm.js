@@ -1,60 +1,52 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useMutation, gql } from '@apollo/client';
+
+const CREATE_PRODUCT = gql`
+  mutation CreateProduct($name: String!, $inventory: Int!, $type: ProductType!) {
+    createProduct(newProduct: { name: $name, inventory: $inventory, type: $type }) {
+      id
+      name
+    }
+  }
+`;
 
 const ProductForm = () => {
   const [name, setName] = useState('');
   const [inventory, setInventory] = useState('');
   const [type, setType] = useState('gadget');
-  const [loading, setLoading] = useState(false);
+
+  const [createProduct, { loading }] = useMutation(CREATE_PRODUCT, {
+    onCompleted: () => {
+      toast.dismiss();
+      toast.success('Product added successfully');
+      setName('');
+      setInventory('');
+      setType('gadget');
+    },
+    onError: () => {
+      toast.dismiss();
+      toast.error('An error occurred');
+    },
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!name) {
-      
+      toast.dismiss();
       toast.error('Name cannot be empty');
       return;
     }
 
     if (isNaN(inventory) || inventory <= 0) {
-      
+      toast.dismiss();
       toast.error('Inventory must be a positive number');
       return;
     }
 
-    setLoading(true);
-
-    const query = `
-      mutation {
-        createProduct(newProduct: {
-          name: "${name}", inventory: ${inventory}, type: ${type}
-        }) {
-          id
-          name
-        }
-      }
-    `;
-
-    try {
-      const response = await axios.post('http://localhost:8080/graphql', { query });
-      if (response.data.errors) {
-        
-        toast.error('An error occurred');
-      } else {
-        
-        toast.success('Product added successfully');
-        setName('');
-        setInventory('');
-        setType('gadget');
-      }
-    } catch (error) {
-      
-      toast.error('An error occurred');
-    } finally {
-      setLoading(false);
-    }
+    createProduct({ variables: { name, inventory: parseInt(inventory, 10), type } });
   };
 
   return (

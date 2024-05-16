@@ -1,51 +1,47 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { useLazyQuery, gql } from '@apollo/client';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+const FIND_AVAILABLE_PRODUCTS = gql`
+  query FindAvailableProducts($type: ProductType!, $pageSize: Int!) {
+    findAvailableProducts(type: $type, pageSize: $pageSize) {
+      id
+      name
+      inventory
+      type
+    }
+  }
+`;
 
 const FindAvailableProductForm = () => {
   const [type, setType] = useState('gadget');
   const [pageSize, setPageSize] = useState('');
-  const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState(null);
+  
+  const [findAvailableProducts, { loading }] = useLazyQuery(FIND_AVAILABLE_PRODUCTS, {
+    fetchPolicy: 'no-cache',
+    onCompleted: (data) => {
+      setProducts(data.findAvailableProducts);
+    },
+    onError: () => {
+      toast.dismiss();
+      toast.error('An error occurred');
+    },
+  });
 
   const handleSubmit = async (e) => {
+    console.log("form submitted --> ");
     e.preventDefault();
 
     if (isNaN(pageSize) || pageSize <= 0) {
-      
+      toast.dismiss();
       toast.error('Page size must be a positive number');
       return;
     }
-
-    setLoading(true);
-
-    const query = `
-      query {
-        findAvailableProducts(type: ${type}, pageSize: ${pageSize}) {
-          id
-          name
-          inventory
-          type
-        }
-      }
-    `;
-
-    try {
-      const response = await axios.post('http://localhost:8080/graphql', { query });
- 
-      if (response.data.errors) {
-        
-        toast.error('An error occurred');
-      } else {
-        setProducts(response.data.data.findAvailableProducts);
-      }
-    } catch (error) {
-      
-      toast.error('An error occurred');
-    } finally {
-      setLoading(false);
-    }
+    
+    console.log("hitting findAvailableProducts --> ", type, pageSize);
+    findAvailableProducts({ variables: { type, pageSize: parseInt(pageSize, 10) } });
   };
 
   return (
