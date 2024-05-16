@@ -3,19 +3,26 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useMutation, gql } from '@apollo/client';
 
-const CREATE_PRODUCT = gql`
-  mutation CreateProduct($name: String!, $inventory: Int!, $type: ProductType!) {
-    createProduct(newProduct: { name: $name, inventory: $inventory, type: $type }) {
-      id
-      name
-    }
-  }
-`;
-
 const ProductForm = () => {
   const [name, setName] = useState('');
   const [inventory, setInventory] = useState('');
   const [type, setType] = useState('gadget');
+  
+
+  const CREATE_PRODUCT = gql`
+    mutation {
+      createProduct(newProduct: {
+        name: "${name}",
+        inventory: ${parseInt(inventory, 10)},
+        type: ${type}
+      }) {
+        id
+        name
+        inventory
+        type
+      }
+    }
+  `;
 
   const [createProduct, { loading }] = useMutation(CREATE_PRODUCT, {
     onCompleted: () => {

@@ -8,7 +8,6 @@ function App() {
   
   useEffect(() => {
     const handleDocumentClick = () => {
-      console.log('document clicked --> ');
       toast.dismiss();
     };
 
