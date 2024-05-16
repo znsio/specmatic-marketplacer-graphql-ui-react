@@ -19,11 +19,13 @@ jest.mock('react-toastify', () => ({
 describe("App component tests", () => {
  
   test('should create product with given form fields', async () => {
-    render(
-      <ApolloProvider client={client}>
-        <ProductForm />
-      </ApolloProvider>
-    );
+    await React.act(async () => { // Use act from @testing-library/react
+      render(
+        <ApolloProvider client={client}>
+          <ProductForm />
+        </ApolloProvider>
+      );
+    });
 
     // Fill out the form
     fireEvent.change(screen.getByTestId('name'), { target: { value: 'Test Product' } });
