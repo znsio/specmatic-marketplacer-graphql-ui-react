@@ -67,6 +67,7 @@ const ProductForm = () => {
           <input
             type="text"
             id="name"
+            data-testid="name"
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -79,6 +80,7 @@ const ProductForm = () => {
           <input
             type="number"
             id="inventory"
+            data-testid="inventory"
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             value={inventory}
             onChange={(e) => setInventory(e.target.value)}
@@ -90,6 +92,7 @@ const ProductForm = () => {
           </label>
           <select
             id="type"
+            data-testid="type"
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             value={type}
             onChange={(e) => setType(e.target.value)}
@@ -103,6 +106,7 @@ const ProductForm = () => {
         <div className="flex items-center justify-between">
           <button
             type="submit"
+            data-testid="submit"
             className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${loading && 'opacity-50 cursor-not-allowed'}`}
             disabled={loading}
           >
