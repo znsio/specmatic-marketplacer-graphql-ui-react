@@ -1,10 +1,10 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import { MockedProvider } from '@apollo/client/testing';
 import { toast } from 'react-toastify';
 import ProductForm from '../components/ProductForm';
-import { gql } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client';
+import client from '../apolloClient';
 
 jest.mock('react-toastify', () => ({
   toast: {
@@ -15,49 +15,11 @@ jest.mock('react-toastify', () => ({
   toastContainer: jest.fn(),
 }));
 
-const CREATE_PRODUCT = gql`
-    mutation {
-      createProduct(newProduct: {
-        name: "Test Product",
-        inventory: 10,
-        type: gadget
-      }) {
-        id
-        name
-        inventory
-        type
-      }
-    }
-`;
-
-const mocks = [
-  {
-    request: {
-      query: CREATE_PRODUCT,
-      variables: {
-        name: 'Test Product',
-        inventory: 10,
-        type: 'gadget',
-      },
-    },
-    result: {
-      data: {
-        createProduct: {
-          id: '1',
-          name: 'Test Product',
-          inventory: 10,
-          type: 'gadget',
-        },
-      },
-    },
-  },
-];
-
 test('fills out the form and submits', async () => {
   render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <ApolloProvider client={client}>
       <ProductForm />
-    </MockedProvider>
+    </ApolloProvider>
   );
 
   // Fill out the form
