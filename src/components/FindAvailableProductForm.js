@@ -3,24 +3,24 @@ import { useLazyQuery, gql } from '@apollo/client';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const FIND_AVAILABLE_PRODUCTS = gql`
-  query FindAvailableProducts($type: ProductType!, $pageSize: Int!) {
-    findAvailableProducts(type: $type, pageSize: $pageSize) {
-      id
-      name
-      inventory
-      type
-    }
-  }
-`;
-
 const FindAvailableProductForm = () => {
   const [type, setType] = useState('gadget');
   const [pageSize, setPageSize] = useState('');
   const [products, setProducts] = useState(null);
   
+  const FIND_AVAILABLE_PRODUCTS = gql`
+    query {
+      findAvailableProducts(type: ${type}, pageSize: ${parseInt(pageSize, 10)}) {
+        id
+        name
+        inventory
+        type
+      }
+    }
+  `;
+
   const [findAvailableProducts, { loading }] = useLazyQuery(FIND_AVAILABLE_PRODUCTS, {
-    fetchPolicy: 'no-cache',
+    fetchPolicy: 'network-only',
     onCompleted: (data) => {
       setProducts(data.findAvailableProducts);
     },
@@ -31,7 +31,6 @@ const FindAvailableProductForm = () => {
   });
 
   const handleSubmit = async (e) => {
-    console.log("form submitted --> ");
     e.preventDefault();
 
     if (isNaN(pageSize) || pageSize <= 0) {
@@ -40,7 +39,6 @@ const FindAvailableProductForm = () => {
       return;
     }
     
-    console.log("hitting findAvailableProducts --> ", type, pageSize);
     findAvailableProducts({ variables: { type, pageSize: parseInt(pageSize, 10) } });
   };
 
