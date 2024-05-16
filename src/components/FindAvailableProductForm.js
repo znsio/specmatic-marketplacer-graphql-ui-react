@@ -52,6 +52,7 @@ const FindAvailableProductForm = () => {
           </label>
           <select
             id="type"
+            data-testid="type"
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             value={type}
             onChange={(e) => setType(e.target.value)}
@@ -69,6 +70,7 @@ const FindAvailableProductForm = () => {
           <input
             type="number"
             id="pageSize"
+            data-testid="pageSize"
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             value={pageSize}
             onChange={(e) => setPageSize(e.target.value)}
@@ -77,6 +79,7 @@ const FindAvailableProductForm = () => {
         <div className="flex items-center justify-between">
           <button
             type="submit"
+            data-testid="submit"
             className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${loading && 'opacity-50 cursor-not-allowed'}`}
             disabled={loading}
           >
@@ -89,7 +92,11 @@ const FindAvailableProductForm = () => {
           <h2 className="text-xl font-bold mb-4">Available Products</h2>
           <div className="grid grid-cols-1 gap-4">
             {products.map((product) => (
-              <div key={product.id} className="p-4 border rounded-lg bg-gray-50 shadow-sm">
+              <div 
+                key={product.id} 
+                className="p-4 border rounded-lg bg-gray-50 shadow-sm"
+                data-testid="product"
+              >
                 <p><strong>ID:</strong> {product.id}</p>
                 <p><strong>Name:</strong> {product.name}</p>
                 <p><strong>Inventory:</strong> {product.inventory}</p>
