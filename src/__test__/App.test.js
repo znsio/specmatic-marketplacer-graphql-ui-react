@@ -26,56 +26,6 @@ jest.mock("react-toastify", () => ({
 }));
 
 describe("App component tests", () => {
-  // test("should create product with given form fields", async () => {
-  //   await React.act(async () => {
-  //     // Use act from @testing-library/react
-  //     render(
-  //       <ApolloProvider client={client}>
-  //         <ProductForm />
-  //       </ApolloProvider>
-  //     );
-  //   });
-
-  //   // Fill out the form
-  //   fireEvent.change(screen.getByTestId("name"), { target: { value: "The Almanac" } });
-  //   fireEvent.change(screen.getByTestId("inventory"), { target: { value: "10" } });
-  //   fireEvent.change(screen.getByTestId("type"), { target: { value: "book" } });
-
-  //   // Submit the form
-  //   fireEvent.click(screen.getByTestId("submit"));
-
-  //   // Wait for the mutation to be called
-  //   await waitFor(() => {
-  //     expect(toast.success).toHaveBeenCalledWith("Product added successfully");
-  //   });
-
-  //   // Optionally, check if the form is cleared
-  //   expect(screen.getByTestId("name").value).toBe("");
-  //   expect(screen.getByTestId("inventory").value).toBe("");
-  //   expect(screen.getByTestId("type").value).toBe("gadget");
-  // });
-
-  // test("should fetch available products", async () => {
-  //   render(
-  //     <ApolloProvider client={client}>
-  //       <FindAvailableProductForm />
-  //     </ApolloProvider>
-  //   );
-
-  //   // Fill out the form
-  //   fireEvent.change(screen.getByTestId("pageSize"), { target: { value: "10" } });
-  //   fireEvent.change(screen.getByTestId("type"), { target: { value: "gadget" } });
-
-  //   // Submit the form
-  //   fireEvent.click(screen.getByTestId("submit"));
-
-  //   // Wait for the form submission and the response
-  //   await waitFor(() => {
-  //     expect(screen.getAllByTestId("product").length).toBeGreaterThan(0);
-  //   });
-  // });
-
-
   // Test for the create cart form
   test('creates a cart and displays cart details', async () => {
     render(
