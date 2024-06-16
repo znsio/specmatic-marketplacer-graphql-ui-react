@@ -34,36 +34,58 @@ const CartForm = () => {
   const [cartId, setCartId] = useState('10');
   const [cartData, setCartData] = useState(null);
   const [fetchedCartData, setFetchedCartData] = useState(null);
+  const [createCartWarning, setCreateCartWarning] = useState('');
+  const [fetchCartWarning, setFetchCartWarning] = useState('');
 
-  // Set up the mutation and query hooks
-  const [createCartMutation, { data: createdCartData }] = useMutation(getCartCreateMutation(firstName, surname, phone));
-  const [fetchCartQuery, { data: fetchedCart }] = useLazyQuery(getCartQuery(cartId));
+  // Set up the mutation and query hooks with error handling
+  const [createCartMutation, { data: createdCartData, error: createCartError }] = useMutation(getCartCreateMutation(firstName, surname, phone));
+  const [fetchCartQuery, { data: fetchedCart, error: fetchCartError }] = useLazyQuery(getCartQuery(cartId));
 
   // Handle the cart creation
   const handleCreateCart = (e) => {
     e.preventDefault();
+    setCreateCartWarning('');  // Reset warning
     createCartMutation();
   };
 
   // Handle the cart fetching
   const handleFetchCart = (e) => {
     e.preventDefault();
+    setFetchCartWarning('');  // Reset warning
     fetchCartQuery();
   };
 
   // Update the state with the results of the mutation
   React.useEffect(() => {
-    if (createdCartData) {
-      setCartData(createdCartData.cartCreate.cart);
+    if (createCartError) {
+      setCreateCartWarning('An error occurred while creating the cart. Please try again.');
+      setCartData(null);
+    } else if (createdCartData) {
+      const cart = createdCartData.cartCreate?.cart;
+      if (cart) {
+        setCartData(cart);
+      } else {
+        setCreateCartWarning('Failed to create cart. Please try again.');
+        setCartData(null);
+      }
     }
-  }, [createdCartData]);
+  }, [createdCartData, createCartError]);
 
   // Update the state with the results of the query
   React.useEffect(() => {
-    if (fetchedCart) {
-      setFetchedCartData(fetchedCart.cart);
+    if (fetchCartError) {
+      setFetchCartWarning('An error occurred while fetching the cart. Please check the cart ID and try again.');
+      setFetchedCartData(null);
+    } else if (fetchedCart) {
+      const cart = fetchedCart.cart;
+      if (cart) {
+        setFetchedCartData(cart);
+      } else {
+        setFetchCartWarning('Cart not found. Please check the cart ID and try again.');
+        setFetchedCartData(null);
+      }
     }
-  }, [fetchedCart]);
+  }, [fetchedCart, fetchCartError]);
 
   return (
     <div className="max-w-md mx-auto p-8 bg-white shadow-lg rounded-lg">
@@ -119,6 +141,12 @@ const CartForm = () => {
         </div>
       </form>
 
+      {createCartWarning && (
+        <div className="mt-4 text-red-500" data-testid="createCartWarning">
+          {createCartWarning}
+        </div>
+      )}
+
       {cartData && (
         <div className="mt-8" data-testid="cartDetails">
           <h2 className="text-xl font-bold mb-4">Cart Created</h2>
@@ -156,6 +184,12 @@ const CartForm = () => {
           </button>
         </div>
       </form>
+
+      {fetchCartWarning && (
+        <div className="mt-4 text-red-500" data-testid="fetchCartWarning">
+          {fetchCartWarning}
+        </div>
+      )}
 
       {fetchedCartData && (
         <div className="mt-8" data-testid="fetchedCartDetails">
