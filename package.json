@@ -26,7 +26,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --coverage --detectOpenHandles --forceExit --transformIgnorePatterns \"node_modules/(?!axios)/\"",
     "eject": "react-scripts eject",
-    "graphiql": "node graphiql-server.js"
+    "graphiql": "node graphiql-server.js",
+    "specmatic:stub": "java -jar node_modules/specmatic-beta/graphql/specmatic-graphql-all.jar stub --data test_data --port 8080"
   },
   "eslintConfig": {
     "extends": [
