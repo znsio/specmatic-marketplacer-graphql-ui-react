@@ -1,28 +1,10 @@
-const express = require('express');
-const { graphqlHTTP } = require('express-graphql');
-const { buildSchema } = require('graphql');
-
-const app = express();
-
-// Define your schema and resolvers
-const schema = buildSchema(`
-  type Query {
-    hello: String
-  }
-`);
-
-const root = { hello: () => 'Hello world!' };
-
-// Serve GraphQL endpoint
-app.use('/graphql', graphqlHTTP({
-  schema: schema,
-  rootValue: root,
-  graphiql: false, // Disable built-in GraphiQL
-}));
+const http = require('http');
+const { parse } = require('url');
 
 // Serve GraphiQL interface
-app.get('/graphiql', (req, res) => {
-  res.send(`
+const serveGraphiQL = (res) => {
+  res.writeHead(200, { 'Content-Type': 'text/html' });
+  res.end(`
     <!DOCTYPE html>
     <html>
     <head>
@@ -61,6 +43,19 @@ app.get('/graphiql', (req, res) => {
     </body>
     </html>
   `);
+};
+
+const server = http.createServer((req, res) => {
+  const { pathname } = parse(req.url, true);
+
+  if (pathname === '/graphiql') {
+    serveGraphiQL(res);
+  } else {
+    res.writeHead(404);
+    res.end();
+  }
 });
 
-app.listen(4000, () => console.log('Now browse to http://localhost:4000/graphiql'));
+server.listen(4000, () => {
+  console.log('Server is running at http://localhost:4000/graphiql');
+});
