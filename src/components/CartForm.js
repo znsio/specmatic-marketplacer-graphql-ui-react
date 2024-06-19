@@ -57,32 +57,32 @@ const CartForm = () => {
 
   // Update the state with the results of the mutation
   React.useEffect(() => {
+    let emptyCart = {id: "", firstName: "", surname: "", phone: ""};
+
     if (createCartError) {
-      setCreateCartWarning('An error occurred while creating the cart. Please try again.');
-      setCartData(null);
+      setCartData(emptyCart);
     } else if (createdCartData) {
       const cart = createdCartData.cartCreate?.cart;
       if (cart) {
         setCartData(cart);
       } else {
-        setCreateCartWarning('Failed to create cart. Please try again.');
-        setCartData(null);
+        setCartData(emptyCart);
       }
     }
   }, [createdCartData, createCartError]);
 
   // Update the state with the results of the query
   React.useEffect(() => {
+    let emptyCart = {id: "", firstName: "", surname: "", phone: ""};
+
     if (fetchCartError) {
-      setFetchCartWarning('An error occurred while fetching the cart. Please check the cart ID and try again.');
-      setFetchedCartData(null);
+      setFetchedCartData(emptyCart);
     } else if (fetchedCart) {
       const cart = fetchedCart.cart;
       if (cart) {
         setFetchedCartData(cart);
       } else {
-        setFetchCartWarning('Cart not found. Please check the cart ID and try again.');
-        setFetchedCartData(null);
+        setFetchedCartData(emptyCart);
       }
     }
   }, [fetchedCart, fetchCartError]);
@@ -151,14 +151,14 @@ const CartForm = () => {
         <div className="mt-8" data-testid="cartDetails">
           <h2 className="text-xl font-bold mb-4">Cart Created</h2>
           <div className="p-4 border rounded-lg bg-gray-50 shadow-sm">
-            <p><strong>ID:</strong> {cartData.id}</p>
-            <p><strong>First Name:</strong> {cartData.firstName}</p>
-            <p><strong>Surname:</strong> {cartData.surname}</p>
-            <p><strong>Phone:</strong> {cartData.phone}</p>
+            <p className="text-left"><strong>ID:</strong> {cartData.id}</p>
+            <p className="text-left"><strong>First Name:</strong> {cartData.firstName}</p>
+            <p className="text-left"><strong>Surname:</strong> {cartData.surname}</p>
+            <p className="text-left"><strong>Phone:</strong> {cartData.phone}</p>
           </div>
         </div>
       )}
-
+      
       <h1 className="text-2xl font-bold mb-4 mt-8">Fetch Cart by ID</h1>
       <form onSubmit={handleFetchCart}>
         <div className="mb-4">
@@ -195,10 +195,10 @@ const CartForm = () => {
         <div className="mt-8" data-testid="fetchedCartDetails">
           <h2 className="text-xl font-bold mb-4">Cart Details</h2>
           <div className="p-4 border rounded-lg bg-gray-50 shadow-sm">
-            <p><strong>ID:</strong> {fetchedCartData.id}</p>
-            <p><strong>First Name:</strong> {fetchedCartData.firstName}</p>
-            <p><strong>Surname:</strong> {fetchedCartData.surname}</p>
-            <p><strong>Phone:</strong> {fetchedCartData.phone}</p>
+            <p className="text-left"><strong>ID:</strong> {fetchedCartData.id}</p>
+            <p className="text-left"><strong>First Name:</strong> {fetchedCartData.firstName}</p>
+            <p className="text-left"><strong>Surname:</strong> {fetchedCartData.surname}</p>
+            <p className="text-left"><strong>Phone:</strong> {fetchedCartData.phone}</p>
           </div>
         </div>
       )}
