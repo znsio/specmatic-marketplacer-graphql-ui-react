@@ -1,5 +1,5 @@
 {
-  "name": "react-boilerplate",
+  "name": "specmatic-order-graphql-ui-react",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -8,6 +8,7 @@
     "@testing-library/react": "^15.0.6",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.2",
+    "cross-env": "^7.0.3",
     "express": "^4.19.2",
     "graphql": "^16.8.2",
     "graphql-http": "^1.22.1",
@@ -26,7 +27,8 @@
     "test": "react-scripts test --coverage --detectOpenHandles --forceExit --transformIgnorePatterns \"node_modules/(?!axios)/\"",
     "eject": "react-scripts eject",
     "graphiql": "node graphiql-server.js",
-    "specmatic:stub": "java -jar node_modules/specmatic-beta/graphql/specmatic-graphql-all.jar stub --data test_data --port 8080"
+    "specmatic:stub": "java -jar node_modules/specmatic-beta/graphql/specmatic-graphql-all.jar stub --data test_data --port 8080",
+    "test-ci": "cross-env SPECMATIC_LOG_LEVEL=debug DEBUG=specmatic-order-graphql-ui-react:* npm run test"
   },
   "eslintConfig": {
     "extends": [
