@@ -1,3 +1,5 @@
+![Diagram](./GraphQLStubbing.gif)
+
 # Specmatic UI project for GraphQL demo
 
 ## Pre-requisites
