@@ -12,21 +12,6 @@ const path = require('path');
 global.setImmediate = global.setImmediate || ((fn, ...args) => global.setTimeout(fn, 0, ...args));
 let stub;
 
-function readCartValues() {
-  console.log(__dirname);
-  console.log(path.resolve(__dirname, '../../test_data/createCart.md'))
-  const data = fs.readFileSync(path.resolve(__dirname, '../../test_data/createCart.md'), 'utf-8');
-  const firstNameMatch = data.match(/firstName: "([^"]+)"/);
-  const surnameMatch = data.match(/surname: "([^"]+)"/);
-  const phoneMatch = data.match(/phone: "([^"]+)"/);
-
-  return {
-    firstName: firstNameMatch ? firstNameMatch[1] : '',
-    surname: surnameMatch ? surnameMatch[1] : '',
-    phone: phoneMatch ? phoneMatch[1] : ''
-  };
-}
-
 beforeAll(async () => {
   stub = await startGraphQlStub("127.0.0.1", 8080, "./test_data");
 }, 5000);
@@ -89,3 +74,19 @@ describe("App component tests", () => {
 afterAll(async () => {
   await stopGraphQlStub(stub);
 }, 5000);
+
+function readCartValues() {
+  console.log(__dirname);
+  console.log(path.resolve(__dirname, '../../test_data/createCart.md'))
+  const data = fs.readFileSync(path.resolve(__dirname, '../../test_data/createCart.md'), 'utf-8');
+  const firstNameMatch = data.match(/firstName: "([^"]+)"/);
+  const surnameMatch = data.match(/surname: "([^"]+)"/);
+  const phoneMatch = data.match(/phone: "([^"]+)"/);
+
+  return {
+    firstName: firstNameMatch ? firstNameMatch[1] : '',
+    surname: surnameMatch ? surnameMatch[1] : '',
+    phone: phoneMatch ? phoneMatch[1] : ''
+  };
+}
+
