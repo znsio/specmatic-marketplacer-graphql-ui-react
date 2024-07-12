@@ -1,0 +1,5 @@
+sources:
+  - provider: git
+    repository: https://github.com/znsio/specmatic-order-contracts.git
+    stub:
+      - com/marketplacer/marketplacer.graphqls
