@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useMutation, useLazyQuery, gql } from '@apollo/client';
 
-// Function to generate the cart create mutation
-const getCartCreateMutation = (firstName, surname, phone) => gql`
-  mutation {
-    cartCreate(input: { attributes: { firstName: "${firstName}", surname: "${surname}", phone: "${phone}" } }) {
+const getCartCreateMutation = gql`
+  mutation CreateCart($input: CartCreateInput!) {
+    cartCreate(input: $input) {
       cart {
         id
         firstName
@@ -15,10 +14,9 @@ const getCartCreateMutation = (firstName, surname, phone) => gql`
   }
 `;
 
-// Function to generate the cart query
-const getCartQuery = (id) => gql`
-  query {
-    cart(id: "${id}") {
+const getCartQuery = gql`
+  query GetCart($id: ID!) {
+    cart(id: $id) {
       id
       firstName
       surname
@@ -38,21 +36,33 @@ const CartForm = () => {
   const [fetchCartWarning, setFetchCartWarning] = useState('');
 
   // Set up the mutation and query hooks with error handling
-  const [createCartMutation, { data: createdCartData, error: createCartError }] = useMutation(getCartCreateMutation(firstName, surname, phone));
-  const [fetchCartQuery, { data: fetchedCart, error: fetchCartError }] = useLazyQuery(getCartQuery(cartId));
+  const [createCartMutation, { data: createdCartData, error: createCartError }] = useMutation(getCartCreateMutation);
+  const [fetchCartQuery, { data: fetchedCart, error: fetchCartError }] = useLazyQuery(getCartQuery);
 
   // Handle the cart creation
   const handleCreateCart = (e) => {
     e.preventDefault();
     setCreateCartWarning('');  // Reset warning
-    createCartMutation();
+    createCartMutation({
+      variables: {
+        input: {
+          attributes: {
+            firstName,
+            surname,
+            phone
+          }
+        }
+      }
+    });
   };
 
   // Handle the cart fetching
   const handleFetchCart = (e) => {
     e.preventDefault();
     setFetchCartWarning('');  // Reset warning
-    fetchCartQuery();
+    fetchCartQuery({
+      variables: { id: cartId }
+    });
   };
 
   // Update the state with the results of the mutation
